@@ -1,0 +1,35 @@
+GET http://localhost:8080/api/events
+Accept: application/json
+
+### List events filtered by createdAfter and churchId
+GET http://localhost:8080/api/events?createdAfter=2025-11-01T00:00:00Z&churchId=church-1
+Accept: application/json
+
+### Create a new event
+POST http://localhost:8080/api/events
+Content-Type: application/json
+
+{
+  "churchId": "church-1",
+  "name": "Culto Dominical",
+  "description": "Culto semanal",
+  "startDatetime": "2025-11-30T10:00:00Z",
+  "endDatetime": "2025-11-30T12:00:00Z",
+  "location": "Igreja Central",
+  "createdBy": "admin"
+}
+
+### Add a participant to an event
+POST http://localhost:8080/api/events/participants
+Content-Type: application/json
+
+{
+  "eventId": "d94831ba-0206-499b-a37e-1498918397ee",
+  "memberId": "member-1",
+  "role": "volunteer",
+  "registeredAt": "2025-11-25T10:00:00Z"
+}
+
+### List participants of an event
+GET http://localhost:8080/api/events/d94831ba-0206-499b-a37e-1498918397ee/participants
+Accept: application/json

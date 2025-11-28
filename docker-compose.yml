@@ -1,0 +1,41 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: postgres:15
+    container_name: postgres_local
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+      POSTGRES_DB: events_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  app:
+    build: .
+    container_name: spring_app
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/events_db
+      SPRING_DATASOURCE_USERNAME: admin
+      SPRING_DATASOURCE_PASSWORD: admin
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_PROFILES_ACTIVE: dev
+    depends_on:
+      - postgres
+    networks:
+      - backend
+    volumes:
+      - ./:/app/src
+      - ./target:/app/target
+      - ~/.m2:/root/.m2
+volumes:
+  pgdata:
+
+networks:
+  backend:
