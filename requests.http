@@ -1,12 +1,12 @@
-GET http://localhost:8080/api/events
+GET http://church-manage-app:8081/api/events
 Accept: application/json
 
 ### List events filtered by createdAfter and churchId
-GET http://localhost:8080/api/events?createdAfter=2025-11-01T00:00:00Z&churchId=church-1
+GET http://localhost:8081/api/events?createdAfter=2025-11-01T00:00:00Z&churchId=church-1
 Accept: application/json
 
 ### Create a new event
-POST http://localhost:8080/api/events
+POST http://localhost:8081/api/events
 Content-Type: application/json
 
 {
@@ -20,7 +20,7 @@ Content-Type: application/json
 }
 
 ### Add a participant to an event
-POST http://localhost:8080/api/events/participants
+POST http://localhost:8081/api/events/participants
 Content-Type: application/json
 
 {
@@ -31,5 +31,5 @@ Content-Type: application/json
 }
 
 ### List participants of an event
-GET http://localhost:8080/api/events/d94831ba-0206-499b-a37e-1498918397ee/participants
+GET http://localhost:8081/api/events/d94831ba-0206-499b-a37e-1498918397ee/participants
 Accept: application/json
