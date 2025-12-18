@@ -33,3 +33,24 @@ Content-Type: application/json
 ### List participants of an event
 GET http://localhost:8081/api/events/d94831ba-0206-499b-a37e-1498918397ee/participants
 Accept: application/json
+
+###
+GET http://localhost:8081/api/events/user/member-1
+Accept: application/json
+
+### Update an event
+PUT http://localhost:8080/api/events/<event-id>
+Content-Type: application/json
+
+{
+  "churchId": "church-1",
+  "name": "Culto Atualizado",
+  "description": "Descrição atualizada",
+  "startDatetime": "2025-12-01T10:00:00Z",
+  "endDatetime": "2025-12-01T12:00:00Z",
+  "location": "Nova Localização",
+  "createdBy": "admin"
+}
+
+### Delete an event
+DELETE http://localhost:8080/api/events/<event-id>

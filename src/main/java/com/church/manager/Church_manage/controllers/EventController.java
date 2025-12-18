@@ -8,9 +8,11 @@ import java.util.List;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -97,7 +99,7 @@ public class EventController {
 
     @GetMapping("/{eventId}/participants")
     public ResponseEntity<List<EventParticipantResponse>> listParticipants(
-           @PathVariable String eventId) {
+            @PathVariable String eventId) {
         List<EventParticipant> participants = participantRepository.findByEventId(eventId);
         List<EventParticipantResponse> response = new ArrayList<>();
         for (EventParticipant p : participants) {
@@ -108,15 +110,45 @@ public class EventController {
                     p.getRole(),
                     p.getRegisteredAt(),
                     p.getCreatedAt(),
-                    p.getUpdatedAt()
-            ));
-        }   
-        return ResponseEntity.ok(new ArrayList<>());  
+                    p.getUpdatedAt()));
+        }
+        return ResponseEntity.ok(response);
     }
 
     @GetMapping("/user/{userId}")
     public ResponseEntity<List<Event>> listEventsForUser(@PathVariable String userId) {
         List<Event> events = eventRepository.findEventsForUser(userId);
         return ResponseEntity.ok(events);
+    }
+
+    @PutMapping("/{eventId}")
+    public ResponseEntity<Event> updateEvent(
+            @PathVariable String eventId,
+            @Valid @RequestBody EventRequest request) {
+        var eventOpt = eventRepository.findById(eventId);
+        if (eventOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        Event event = eventOpt.get();
+        event.setName(request.getName());
+        event.setDescription(request.getDescription());
+        event.setStartDatetime(request.getStartDatetime());
+        event.setEndDatetime(request.getEndDatetime());
+        event.setLocation(request.getLocation());
+
+        Event updated = eventRepository.save(event);
+        return ResponseEntity.ok(updated);
+    }
+
+    @DeleteMapping("/{eventId}")
+    public ResponseEntity<Void> deleteEvent(@PathVariable String eventId) {
+        var eventOpt = eventRepository.findById(eventId);
+        if (eventOpt.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        eventRepository.delete(eventOpt.get());
+        return ResponseEntity.noContent().build();
     }
 }
